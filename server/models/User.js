@@ -38,8 +38,7 @@ const userSchema = mongoose.Schema({
 })
 //mongoose에서 가져온 메서드 유저 정보를 저장하기 전에 함수 실행
 userSchema.pre('save', function( next ){
-    var user = this //위 userSchema를 가리키는 것
-
+    let user = this //위 userSchema를 가리키는 것
     //사이트를 이용하다 보면 사용자 정보를 바꿀때가 있다.
     //바꿀 때마다 암호화 됨 그래서 아래 조건을 둔다. 패스워드가 변경될 때만
     if(user.isModified('password')){
@@ -66,19 +65,34 @@ userSchema.methods.comparePassword = function(plainPassword, callback){
 
     bcrypt.compare(plainPassword, this.password, function(err, isMatch){
         if(err) return callback(err)
-            callback(null, isMatch)
+        callback(null, isMatch)
     })
 }
 
 userSchema.methods.generateToken = function(callback){
     // jsonwebtoken을 이용해서 token 생성하기
-    var user = this
-    var token = jwt.sign(user._id.toHexString(), 'secretToken') //이름은 아무렇게나 정해도 됨
+    let user = this
+    let token = jwt.sign(user._id.toHexString(), 'secretToken') //이름은 아무렇게나 정해도 됨
 
     user.token = token
     user.save(function(err, user){
         if(err) return callback(err)
         callback(null, user)
+    })
+}
+
+userSchema.statics.findByToken = function(token, callback){ //복호화
+    let user = this
+    console.log(user)
+        //토큰을 decode 한다.
+    jwt.verify(token, 'secretToken', function(err, decoded){
+        //유저 아이디를 이용해서 유저를 찾은 다음
+        //클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인
+
+        user.findOne({_id: decoded, token: token}, function(err, user){
+            if(err) return callback(err)
+            callback(null, user)
+        })
     })
 }
 
