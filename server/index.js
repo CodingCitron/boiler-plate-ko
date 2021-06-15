@@ -25,6 +25,10 @@ mongoose.connect(config.mongoURI,{
 
 app.get('/', (req, res) => res.send('HelloWorld')) // /루트 디렉토리에 헬로 월드가 출력되게 한다. 
 
+app.get('/api/hello', (req, res) => {
+  res.send('안녕하세요')
+})
+
 app.post('/api/users/register', (req, res) => {
   //회원 가입 시 필요한 정보를 client에서 가져오면 
   //그것들을 데이터 베이스에 넣어준다.
