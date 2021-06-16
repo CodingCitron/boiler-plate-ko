@@ -9,6 +9,7 @@ import {
 import LandingPage from './components/views/LandingPage/LandingPage';
 import LoginPage from './components/views/LoginPage/LoginPage';
 import RegisterPage from './components/views/RegisterPage/RegisterPage';
+import auth from './hoc/auth'
 
 function App() {
   return (
@@ -23,9 +24,9 @@ function App() {
           of them to render at a time
         */}
         <Switch>
-          <Route exact path="/" component={LandingPage} />{/* 임폴트한 페이지를 이런식으로 넣을 수 있게 되는듯 */}
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/" component={auth(LandingPage, null)} />{/* 임폴트한 페이지를 이런식으로 넣을 수 있게 되는듯 */}
+          <Route exact path="/login" component={auth(LoginPage, false)} />
+          <Route exact path="/register" component={auth(RegisterPage, false)} />
         </Switch>
       </div>
     </Router>

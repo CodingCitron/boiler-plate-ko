@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { loginUser } from '../../../_actions/user_actions';
+import { loginUser } from '../../../_actions/user_action';
 
 function LoginPage(props) {
     const dispatch = useDispatch();
@@ -28,7 +28,7 @@ function LoginPage(props) {
 
         dispatch(loginUser(body))
             .then(response => {
-                if(response.payload.loginSuccewss){
+                if(response.payload.loginSuccess){
                     props.history.push('/')
                 }else{
                     alert('Error')
